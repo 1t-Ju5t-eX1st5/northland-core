@@ -1,0 +1,7 @@
+# Flask library requirements, otherwise the code wont work
+Flask>=2.2.2
+Flask-SQLAlchemy>=3.0.2
+Flask-Login>=0.6.2
+
+# Not needed if you're not using ESI-related web pages
+esipy>=1.2.3
