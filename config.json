@@ -1,0 +1,9 @@
+{
+    "application": {
+        "app_key": "AeRiG4DFO8hrE4dtIyylreU3QkbC4dGxoiFQSGYQ",
+        "client_id": "1c5de795f08749879f5b98ed510962de",
+        "callback": "http://127.0.0.1:5000/callback",
+        "janice_api_key": "kaueSfles2LEHS3QjH00MslhqszKZdG0",
+        "headers": {"User-Agent": "Northland-Core"}
+    }
+}
