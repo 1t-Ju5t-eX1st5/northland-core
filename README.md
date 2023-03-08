@@ -42,6 +42,7 @@ pip install -r requirements.txt
         "headers": {"User-Agent": "YOUR_HEADER"}
     }
 }
+```
 
 4. Run the following command in the command prompt
 ```shell
