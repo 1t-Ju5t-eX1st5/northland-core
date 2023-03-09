@@ -17,7 +17,7 @@ It also has some basic capabilities to communicate with the EVE Online API servi
 
 1. Clone the repository on your system
 ```shell
-git clone https://github.com/Kyria/flask-esipy-example.git
+gh repo clone 1t-Ju5t-eX1st5/northland-core
 ```
 
 2. Install requirements on your system
