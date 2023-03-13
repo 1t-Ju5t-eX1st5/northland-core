@@ -1,6 +1,4 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
-from . import db
-from .models import User
 from .backend import esidata
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, login_user, logout_user, current_user
@@ -63,7 +61,7 @@ def callback():
     
     # Now that we've been successfully authenticated, lets redirect the user back to the home page and let the backend do the work
 
-@auth.route('/sign-up', methods=['GET', 'POST'])
+"""@auth.route('/sign-up', methods=['GET', 'POST'])
 def signup():
     if request.method == "POST":
         email = request.form.get('email')
@@ -97,4 +95,4 @@ def signup():
     else:
         pass
 
-    return render_template("signup.html", user=current_user)
+    return render_template("signup.html", user=current_user)"""

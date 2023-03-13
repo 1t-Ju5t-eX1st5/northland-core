@@ -8,12 +8,21 @@
 Hello <strong>{{ current_user.character_name }}</strong><br>
 Wallet balance: {{ char_wallet.data }} ISK
 </br>
+<br>
+Corporation wallet information:
+{% if corp_wallet_error == True %}
+<br>Corp wallet information could not be obtained. Try again later
+{% else %}
+{% for item in range(corp_wallet | length) %}
+{% if item == 0 %}
+<br>Master Division: {{ corp_wallet[item] }} ISK
+{% else %}
+<br>Division {{ item + 1 }}: {{ corp_wallet[item] }} ISK
+{% endif %}
+{% endfor %}
+{% endif %}
 
-<br>
-Corporation wallet balance: {{ corp_wallet.data }} ISK
-<br>
-<br>
-
+<br><br>
 <strong>Your ESI Informations:</strong>
 <dl>
     <dt>Character ID:</dt><dd>{{ current_user.character_id }}</dd>

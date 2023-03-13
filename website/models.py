@@ -5,42 +5,11 @@ from datetime import datetime
 
 import time
 
-class Note(db.Model):
-    # Database entry template for a note
-    id = db.Column(db.Integer, primary_key=True)
-    data = db.Column(db.String(10000))
-    date = db.Column(db.DateTime(timezone=True), default=func.now())
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))   # Column contains data from the class User (foreign relationship)
-    
-
-
 class User(db.Model, UserMixin):
-    # Database entry template for a user account
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(150), unique=True)
-    password = db.Column(db.String(150))
-    first_name = db.Column(db.String(150))
-    notes = db.relationship('Note') # Every time the user creates a new note, add its ID to the user's list
-    
-    """
-    def is_active(self):
-        return True
-    
-    def is_authenticated(self):
-        return True
-    
-    def is_anonymous(self):
-        return False
-    
-    def get_id(self):
-        return self.id
-    """
-
-class Player(db.Model, UserMixin):
     character_id = db.Column(db.BigInteger, primary_key=True, autoincrement=False)
     character_name = db.Column(db.String(200), unique=True)
     character_owner_hash = db.Column(db.String(225))
-    character_corp = db.Column(db.String(500))
+    character_corp = db.Column(db.BigInteger)
     
     # SSO tokens and stuff, I guess...
     access_token = db.Column(db.String(4096))

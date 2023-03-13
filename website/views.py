@@ -1,43 +1,29 @@
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, render_template, request, flash, jsonify, redirect
 from flask_login import login_required, current_user
-from .models import Note
 from .backend import esidata
-from . import db
-
-import json
 
 views = Blueprint('views', __name__)
 EsiData = esidata.EsiData()
 
-@views.route('/', methods=['GET', 'POST'])
-@login_required
+@views.route('/')
 def home():
-    if request.method == "POST":
-        note = request.form.get('note')
-        if len(note) < 1:
-            flash('Note is too short', category='error')
-        else:
-            new_note = Note(data = note, user_id = current_user.id)
-            db.session.add(new_note)
-            db.session.commit()
-            flash('Note added!', category='success')
-
-    return render_template("home.html", user=current_user)
-
-@views.route('/delete-note', methods=['POST'])
-def delete_note():
-    note = json.loads(request.data)
-    noteId = note['noteId']
-    note = Note.query.get(noteId)
-    if note:
-        if note.user_id == current_user.id:
-            db.session.delete(note)
-            db.session.commit()
-
-    return jsonify({})
+    return render_template('home.html')
 
 @views.route('/wallet')
+@login_required
 def wallet():
     char_wallet = EsiData.get_character_wallet()
-    corp_wallet = EsiData.get_corporation_wallet()
+    corp_wallet_res = EsiData.get_corporation_wallet()
+    corp_wallet = []
+    try:
+        for item in corp_wallet_res.data:
+            div_balance = round(float(str(item['balance']) + "000"), 2)
+            corp_wallet.append(f'{div_balance:,}')
+    except TypeError:
+        flash('There is an error getting corporation wallet information', category='error')
+        return render_template('wallet.html', char_wallet=char_wallet, corp_wallet_error=True)
     return render_template('wallet.html', char_wallet=char_wallet, corp_wallet=corp_wallet)
+
+@views.route('/about')
+def about():
+    return render_template('about.html')

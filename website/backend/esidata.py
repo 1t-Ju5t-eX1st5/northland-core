@@ -4,18 +4,16 @@ from esipy import EsiClient
 from esipy import EsiSecurity
 from esipy.utils import generate_code_verifier
 
-from flask import redirect, url_for, Blueprint, session
-from flask_login import login_user, logout_user, current_user
-from sqlalchemy.orm.exc import NoResultFound
+from flask_login import login_user, current_user
 
-from website.models import Player
+from website.models import User
 from website import db
 
 import json
 import hashlib
 import secrets
 
-with open("config.json") as f:
+with open("dev_config.json") as f:
     config = json.load(f)
     app_config = config['application']
 
@@ -79,19 +77,19 @@ class EsiData():
         character_data = self.security.verify()
         
         # Check in the database if the user exists, and if they arent create a new user account for them
-        user = Player.query.filter_by(character_id=character_data['sub'].split(':')[2]).first()
+        user = User.query.filter_by(character_id=character_data['sub'].split(':')[2]).first()
         if user == None:
-            user = Player()
+            user = User()
             user.character_id = character_data['sub'].split(':')[2]
         
         user.character_owner_hash = character_data['owner']
         user.character_name = character_data['name']
-        print(character_data)
         user.update_token(auth_response)
         character_corp_op = self.esiapp.op['get_characters_character_id'](
-            character_id=current_user.character_id
+            character_id=character_data['sub'].split(':')[2]
         )
-        self.character_corp = self.client.request(character_corp_op).data['corporation_id']
+        # self.character_corp = self.client.request(character_corp_op).data['corporation_id']
+        user.character_corp = self.client.request(character_corp_op).data['corporation_id']
 
         # New user created, now we add them to our database (I should really rename it...)
         try:
@@ -130,3 +128,15 @@ class EsiData():
             )
             char_wallet = self.client.request(op)
         return char_wallet
+    
+    def get_corporation_wallet_transactions(self, wallet_division=1):
+        corp_transactions = None
+
+        if current_user.is_authenticated:
+            self.security.update_token(current_user.get_sso_data())
+            op = self.esiapp.op['get_corporations_corporation_id_wallets_division_journal'](
+                corporation_id=current_user.character_corp,
+                division=wallet_division
+            )
+            corp_transactions = self.client.request(op)
+        return corp_transactions
