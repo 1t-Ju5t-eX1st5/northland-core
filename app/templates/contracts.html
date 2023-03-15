@@ -1,0 +1,35 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content%}
+
+<body>
+	<h1>Contracts</h1>
+	<div class="container">
+        <form method="POST">
+		    <div class="dropdown">
+		    	<label for="contract-recipient">Contract Recipient</label>
+		    	<select id="contract-recipient" name="contract_recipient">
+		    		<option value="all">All</option>
+		    		<option value="character">Character</option>
+		    		<option value="corporation">Corporation</option>
+		    	</select>
+		    </div>
+		    <div class="dropdown">
+			    <label for="contract-type">Contract Type</label>
+			    <select id="contract-type" name="contract_type">
+			    	<option value="all">All</option>
+			    	<option value="courier">Courier</option>
+			    	<option value="item-exchange">Item Exchange</option>
+			    	<option value="auction">auction</option>
+			    </select>
+		    </div>
+            <input type="submit" value="Submit">
+        </form>
+		<div class="results">
+			<ul>
+				{% if contract_data %}
+                {{ contract_data }}
+                {% endif %}
+			</ul>
+		</div>
+	</div>
+
+{% endblock %}

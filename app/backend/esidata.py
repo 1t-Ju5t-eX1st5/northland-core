@@ -6,8 +6,8 @@ from esipy.utils import generate_code_verifier
 
 from flask_login import login_user, current_user
 
-from website.models import User
-from website import db
+from app.models import User
+from app import db
 
 import json
 import hashlib
@@ -105,38 +105,20 @@ class EsiData():
             print("Returning user")
             return user
 
-    def get_corporation_wallet(self):
-        corp_wallet = None
-        
+    def get_wallet_data(self, wallet_type: str):
         # If current user is authenticated, get wallet content
         if current_user.is_authenticated:
             self.security.update_token(current_user.get_sso_data())
-            op = self.esiapp.op['get_corporations_corporation_id_wallets'](
-                corporation_id=current_user.character_corp
-            )
-            corp_wallet = self.client.request(op)
-        return corp_wallet
+            if wallet_type == "character":
+                op = self.esiapp.op['get_characters_character_id_wallet'](
+                    character_id=current_user.character_id
+                )
+            elif wallet_type == "corporation":
+                op = self.esiapp.op['get_corporations_corporation_id_wallets'](
+                    corporation_id=current_user.character_corp
+                )
+            wallet_data = self.client.request(op)
+        return wallet_data
 
-    def get_character_wallet(self):
-        char_wallet = None
-
-        # If current user is authenticated, get wallet content
-        if current_user.is_authenticated:
-            self.security.update_token(current_user.get_sso_data())
-            op = self.esiapp.op['get_characters_character_id_wallet'](
-                character_id=current_user.character_id
-            )
-            char_wallet = self.client.request(op)
-        return char_wallet
-    
-    def get_corporation_wallet_transactions(self, wallet_division=1):
-        corp_transactions = None
-
-        if current_user.is_authenticated:
-            self.security.update_token(current_user.get_sso_data())
-            op = self.esiapp.op['get_corporations_corporation_id_wallets_division_journal'](
-                corporation_id=current_user.character_corp,
-                division=wallet_division
-            )
-            corp_transactions = self.client.request(op)
-        return corp_transactions
+    def get_contract_data(self, contract_recipient: str, contract_type: str):
+        pass
