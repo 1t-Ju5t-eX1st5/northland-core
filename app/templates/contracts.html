@@ -13,12 +13,12 @@
 		    	</select>
 		    </div>
 		    <div class="dropdown">
-			    <label for="contract-type">Contract Type</label>
-			    <select id="contract-type" name="contract_type">
+			    <label for="contract-status">Contract Status</label>
+			    <select id="contract-status" name="contract_status">
 			    	<option value="all">All</option>
-			    	<option value="courier">Courier</option>
-			    	<option value="item-exchange">Item Exchange</option>
-			    	<option value="auction">auction</option>
+			    	<option value="outstanding">Outstanding</option>
+			    	<option value="finished">Finished</option>
+			    	<option value="expired">Expiried</option>
 			    </select>
 		    </div>
             <input type="submit" value="Submit">
@@ -26,7 +26,9 @@
 		<div class="results">
 			<ul>
 				{% if contract_data %}
-                {{ contract_data }}
+                {% for contract in contract_data %}
+				<br>{{ contract }}
+				{% endfor %}
                 {% endif %}
 			</ul>
 		</div>

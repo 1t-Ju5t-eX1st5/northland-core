@@ -9,7 +9,7 @@ class User(db.Model, UserMixin):
     character_id = db.Column(db.BigInteger, primary_key=True, autoincrement=False)
     character_name = db.Column(db.String(200), unique=True)
     character_owner_hash = db.Column(db.String(225))
-    character_corp = db.Column(db.BigInteger)
+    corporation_id = db.Column(db.BigInteger)
     
     # SSO tokens and stuff, I guess...
     access_token = db.Column(db.String(4096))
